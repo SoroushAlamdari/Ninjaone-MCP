@@ -1,0 +1,51 @@
+{
+  "name": "ninjaone-mcp",
+  "version": "1.0.0",
+  "description": "Model Context Protocol server for NinjaOne RMM API - Enable Claude to manage devices, tickets, and operations",
+  "author": "Your Name",
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "ninjaone-mcp": "dist/index.js"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "node dist/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint src --ext .ts",
+    "type-check": "tsc --noEmit",
+    "prepublish": "npm run build"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.24.0",
+    "axios": "^1.6.0",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@typescript-eslint/eslint-plugin": "^6.13.0",
+    "@typescript-eslint/parser": "^6.13.0",
+    "eslint": "^8.54.0",
+    "typescript": "^5.3.2"
+  },
+  "keywords": [
+    "mcp",
+    "ninjaone",
+    "rmm",
+    "claude",
+    "model-context-protocol",
+    "api-integration"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/ninjaone-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/ninjaone-mcp/issues"
+  }
+}
