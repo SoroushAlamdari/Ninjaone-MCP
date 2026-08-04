@@ -35,7 +35,7 @@ A comprehensive Model Context Protocol (MCP) server for NinjaOne RMM API integra
 
 1. **Clone the repository:**
 ```bash
-git clone https://github.com/yourusername/ninjaone-mcp.git
+git clone https://github.com/soroushalamdari/ninjaone-mcp.git
 cd ninjaone-mcp
 ```
 
