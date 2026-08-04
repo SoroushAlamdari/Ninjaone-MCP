@@ -73,46 +73,139 @@ npm run build
 2. **Set the redirect URI:**
    - Use the exact URI you configured in `.env`
 
-## Available Tools
+## Claude Desktop Integration
+
+### Setup Instructions
+
+1. **Build the MCP server:**
+```bash
+npm run build
+```
+
+2. **Add to Claude Desktop config:**
+
+**On macOS:**
+```bash
+# Edit ~/.claude/claude_desktop_config.json
+nano ~/.claude/claude_desktop_config.json
+```
+
+**On Windows:**
+```
+# Edit %APPDATA%\Claude\claude_desktop_config.json
+# Open: C:\Users\<YourUsername>\AppData\Roaming\Claude\claude_desktop_config.json
+```
+
+3. **Add this to the `mcpServers` section:**
+
+```json
+{
+  "mcpServers": {
+    "ninjaone-mcp": {
+      "command": "node",
+      "args": [
+        "/path/to/ninjaone-mcp/dist/index.js"
+      ],
+      "env": {
+        "NINJA_CLIENT_ID": "your_access_key_id",
+        "NINJA_CLIENT_SECRET": "your_secret_access_key",
+        "NINJA_REDIRECT_URI": "https://yourdomain.com/callback",
+        "NINJA_API_BASE_URL": "https://api.ninjarmm.com"
+      }
+    }
+  }
+}
+```
+
+**Replace `/path/to/ninjaone-mcp/` with your actual installation path:**
+- **macOS:** `/Users/username/ninjaone-mcp`
+- **Windows:** `C:\\Users\\username\\ninjaone-mcp`
+
+4. **Restart Claude Desktop:**
+   - Close Claude Desktop completely
+   - Reopen it
+   - The NinjaOne MCP will now be available
+
+### Verify Installation
+
+In Claude Desktop, you should see the NinjaOne tools available. Test with:
+```
+"List all devices"
+"Show me active alerts"
+"Get device health report"
+```
+
+### Troubleshooting
+
+**"NinjaOne MCP not showing up"**
+- Verify the path to `dist/index.js` is correct
+- Make sure you've run `npm run build`
+- Check that Claude Desktop was completely restarted
+- Verify JSON syntax in config file (use [JSON validator](https://jsonlint.com))
+
+**"NINJA_CLIENT_ID or NINJA_CLIENT_SECRET error"**
+- Ensure environment variables are in the `env` section
+- Verify credentials are correct in NinjaOne settings
+- Check for extra spaces or quotes in values
+
+**"node: command not found"**
+- Ensure Node.js 20+ is installed: `node --version`
+- Use full path to node if needed on Windows
+
+## Available Tools (20+ Tools)
 
 ### Device Management
-- `list_devices` - List all devices
-- `get_device` - Get device details
-- `search_devices` - Search devices
-- `get_device_alerts` - Get device alerts
-- `get_all_alerts` - Get all active alerts
+- `list_devices` - List all devices with pagination
+- `get_device` - Get detailed device information
+- `search_devices` - Search devices using filter syntax
+- `get_device_alerts` - Get active alerts for a device
+- `get_all_alerts` - Get all active alerts across devices
 
 ### Device Actions
-- `reboot_device` - Reboot device
-- `run_script` - Run script on device
+- `reboot_device` - Reboot device (graceful or force)
+- `run_script` - Run script or built-in action on device
 
-### Patches
-- `get_os_patches` - Get OS patch status
-- `get_software_patches` - Get software patch status
+### Patch Management
+- `get_os_patches` - Get OS patch status for device
+- `get_software_patches` - Get software patch status for device
 
 ### Software & Inventory
-- `get_device_software` - Get software inventory
+- `get_device_software` - Get software inventory for device
 
 ### Ticketing
-- `create_ticket` - Create ticket
+- `create_ticket` - Create new support ticket
 - `get_ticket` - Get ticket details
-- `update_ticket` - Update ticket
-- `add_ticket_comment` - Add comment
+- `update_ticket` - Update ticket information
+- `add_ticket_comment` - Add comment to ticket
+- `get_ticket_forms` - Get available ticket forms
 
 ### Organizations
-- `list_organizations` - List organizations
+- `list_organizations` - List all organizations
 - `get_organization` - Get organization details
 
-### Reports
+### Reports & Queries
 - `get_device_health` - Device health report
-- `get_antivirus_status` - Antivirus report
+- `get_antivirus_status` - Antivirus status report
 
 ### Contacts
-- `list_contacts` - List contacts
+- `list_contacts` - List all contacts
 
-### Generic API
-- `api_get` - Generic GET request
-- `api_post` - Generic POST request
+### Advanced/Generic API
+- `api_get` - Make generic GET request to any NinjaOne endpoint
+- `api_post` - Make generic POST request to any NinjaOne endpoint
+
+### Example Prompts
+
+Ask Claude:
+```
+"List all devices"
+"Show me critical alerts"
+"Get patch status for device ABC123"
+"Create a ticket for offline device"
+"Generate device health report"
+"Search for all Windows 10 devices"
+"Get antivirus status across all systems"
+```
 
 ## Development
 
