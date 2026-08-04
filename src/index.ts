@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import * as dotenv from "dotenv";
-import { Server } from "@anthropic-ai/sdk/lib/MessageStream.js";
+import readline from "readline";
 import { NinjaOneClient } from "./api-client.js";
 import { OAuthManager } from "./oauth.js";
 import { NinjaOneConfig } from "./types.js";
@@ -127,6 +127,74 @@ async function processToolCall(
   }
 }
 
+// Simple stdio-based MCP server implementation
+async function handleRequest(line: string): Promise<void> {
+  try {
+    const request = JSON.parse(line);
+
+    if (request.method === "initialize") {
+      const response = {
+        jsonrpc: "2.0",
+        id: request.id,
+        result: {
+          protocolVersion: "2024-11-05",
+          capabilities: {
+            tools: {
+              listChanged: false,
+            },
+          },
+          serverInfo: {
+            name: "ninjaone-mcp",
+            version: "1.0.0",
+          },
+        },
+      };
+      console.log(JSON.stringify(response));
+    } else if (request.method === "tools/list") {
+      const response = {
+        jsonrpc: "2.0",
+        id: request.id,
+        result: {
+          tools,
+        },
+      };
+      console.log(JSON.stringify(response));
+    } else if (request.method === "tools/call") {
+      const result = await processToolCall(
+        request.params.name,
+        request.params.arguments
+      );
+      const response = {
+        jsonrpc: "2.0",
+        id: request.id,
+        result: {
+          content: [
+            {
+              type: "text",
+              text: result,
+            },
+          ],
+        },
+      };
+      console.log(JSON.stringify(response));
+    } else {
+      const response = {
+        jsonrpc: "2.0",
+        id: request.id,
+        error: {
+          code: -32601,
+          message: `Unknown method: ${request.method}`,
+        },
+      };
+      console.log(JSON.stringify(response));
+    }
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : String(error);
+    console.error(`Error processing request: ${errorMessage}`);
+  }
+}
+
 async function main() {
   console.error(
     "NinjaOne MCP Server started. Waiting for requests from Claude...\n"
@@ -134,60 +202,20 @@ async function main() {
   console.error(`API Base URL: ${config.apiBaseUrl}`);
   console.error(`Using OAuth for authentication\n`);
 
-  const server = new Server({
-    name: "ninjaone-mcp",
-    version: "1.0.0",
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+    terminal: false,
   });
 
-  server.setRequestHandler((request) => {
-    if (request.method === "initialize") {
-      return {
-        protocolVersion: "2024-11-05",
-        capabilities: {
-          tools: {
-            listChanged: false,
-          },
-        },
-        serverInfo: {
-          name: "ninjaone-mcp",
-          version: "1.0.0",
-        },
-      };
+  rl.on("line", (line: string) => {
+    if (line.trim()) {
+      handleRequest(line);
     }
-
-    if (request.method === "tools/list") {
-      return {
-        tools,
-      };
-    }
-
-    if (request.method === "tools/call") {
-      const toolRequest = request as unknown as {
-        params: {
-          name: string;
-          arguments: Record<string, any>;
-        };
-      };
-
-      return processToolCall(
-        toolRequest.params.name,
-        toolRequest.params.arguments
-      ).then((result) => ({
-        content: [
-          {
-            type: "text",
-            text: result,
-          },
-        ],
-      }));
-    }
-
-    throw new Error(`Unknown request method: ${request.method}`);
   });
 
-  server.listen({
-    inputStream: process.stdin,
-    outputStream: process.stdout,
+  rl.on("close", () => {
+    process.exit(0);
   });
 }
 
