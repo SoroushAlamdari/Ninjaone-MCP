@@ -2,7 +2,7 @@
   "name": "ninjaone-mcp",
   "version": "1.0.0",
   "description": "Model Context Protocol server for NinjaOne RMM API - Enable Claude to manage devices, tickets, and operations",
-  "author": "Your Name",
+  "author": "Soroush Alamdari",
   "license": "MIT",
   "type": "module",
   "main": "dist/index.js",
@@ -43,9 +43,9 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/ninjaone-mcp.git"
+    "url": "https://github.com/SoroushAlamdari/Ninjaone-MCP.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/ninjaone-mcp/issues"
+    "url": "https://github.com/SoroushAlamdari/Ninjaone-MCP/issues"
   }
 }
