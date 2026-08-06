@@ -177,7 +177,9 @@ async function handleRequest(line: string): Promise<void> {
         },
       };
       console.log(JSON.stringify(response));
-    } else {
+    } else if (request.method === "notifications/initialized") {
+      // Don't respond to notifications - they don't expect a response
+    } else if (request.id !== undefined) {
       const response = {
         jsonrpc: "2.0",
         id: request.id,
