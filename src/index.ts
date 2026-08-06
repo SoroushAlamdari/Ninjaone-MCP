@@ -196,11 +196,14 @@ async function handleRequest(line: string): Promise<void> {
 }
 
 async function main() {
-  console.error(
-    "NinjaOne MCP Server started. Waiting for requests from Claude...\n"
-  );
-  console.error(`API Base URL: ${config.apiBaseUrl}`);
-  console.error(`Using OAuth for authentication\n`);
+  // Log to stderr only in debug mode to avoid interfering with MCP protocol
+  if (process.env.DEBUG) {
+    console.error(
+      "NinjaOne MCP Server started. Waiting for requests from Claude...\n"
+    );
+    console.error(`API Base URL: ${config.apiBaseUrl}`);
+    console.error(`Using OAuth for authentication\n`);
+  }
 
   const rl = readline.createInterface({
     input: process.stdin,
