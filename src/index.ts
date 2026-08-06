@@ -211,9 +211,9 @@ async function main() {
     terminal: false,
   });
 
-  rl.on("line", (line: string) => {
+  rl.on("line", async (line: string) => {
     if (line.trim()) {
-      handleRequest(line);
+      await handleRequest(line);
     }
   });
 
