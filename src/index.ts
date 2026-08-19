@@ -151,11 +151,17 @@ async function handleRequest(line: string): Promise<void> {
       };
       console.log(JSON.stringify(response));
     } else if (request.method === "tools/list") {
+      // Convert tools to MCP format (inputSchema instead of input_schema)
+      const mcpTools = tools.map((tool) => ({
+        name: tool.name,
+        description: tool.description,
+        inputSchema: tool.input_schema,
+      }));
       const response = {
         jsonrpc: "2.0",
         id: request.id,
         result: {
-          tools,
+          tools: mcpTools,
         },
       };
       console.log(JSON.stringify(response));
