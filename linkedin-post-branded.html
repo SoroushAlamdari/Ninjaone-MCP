@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NinjaOne + Claude MCP</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+
+        .post {
+            width: 100%;
+            max-width: 1200px;
+            aspect-ratio: 1.91 / 1;
+            position: relative;
+            border-radius: 0;
+            overflow: hidden;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1a2e 50%, #16213e 100%);
+        }
+
+        /* Racing stripes overlay */
+        .post::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                linear-gradient(90deg, transparent 0%, rgba(224, 120, 86, 0.1) 20%, transparent 40%),
+                linear-gradient(90deg, transparent 60%, rgba(0, 212, 255, 0.1) 80%, transparent 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Red accent stripe */
+        .post::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 10px;
+            height: 100%;
+            background: linear-gradient(to bottom, #d32f2f, #ff6b6b, #d32f2f);
+            z-index: 1;
+        }
+
+        .content {
+            position: relative;
+            z-index: 5;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 50px 60px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 15px;
+        }
+
+        .ninja-star-logo {
+            width: 90px;
+            height: 90px;
+            flex-shrink: 0;
+        }
+
+        .ninja-text-logo {
+            font-size: 60px;
+            font-weight: 900;
+            letter-spacing: -2px;
+            display: flex;
+            align-items: center;
+            gap: 0;
+        }
+
+        .ninja-part {
+            color: #1a1a2e;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .one-part {
+            color: #2ba3d0;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .plus-sign {
+            font-size: 50px;
+            color: #00d4ff;
+            margin: 0 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .claude-ai {
+            font-size: 60px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #00d4ff, #0066cc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: none;
+        }
+
+        .tagline {
+            font-size: 16px;
+            color: #aaa;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        /* Integration */
+        .integration {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            gap: 40px;
+        }
+
+        .platform-card {
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            backdrop-filter: blur(20px);
+            flex: 0.3;
+            transition: all 0.3s ease;
+        }
+
+        .platform-card:hover {
+            border-color: rgba(0, 212, 255, 0.4);
+            background: rgba(0, 212, 255, 0.05);
+            transform: translateY(-8px);
+        }
+
+        .platform-logo {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+        }
+
+        .platform-name {
+            font-size: 24px;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 12px;
+        }
+
+        .platform-desc {
+            font-size: 13px;
+            color: #bbb;
+            line-height: 1.6;
+        }
+
+        /* MCP Bridge */
+        .bridge {
+            flex: 0.4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+        }
+
+        .arrow {
+            font-size: 40px;
+            color: #00d4ff;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(0) scale(1); }
+            50% { transform: translateX(10px) scale(1.1); }
+        }
+
+        .mcp-box {
+            background: linear-gradient(135deg, #ff006e 0%, #00d4ff 100%);
+            color: white;
+            padding: 20px 35px;
+            border-radius: 15px;
+            font-weight: 800;
+            font-size: 18px;
+            box-shadow: 0 15px 50px rgba(255, 0, 110, 0.4);
+        }
+
+        .bridge-label {
+            font-size: 11px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        .tools-dots {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 12px;
+            width: 100%;
+        }
+
+        .tool-dot {
+            font-size: 18px;
+            padding: 8px;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .tool-dot:hover {
+            background: rgba(0, 212, 255, 0.2);
+            border-color: rgba(0, 212, 255, 0.6);
+        }
+
+        /* Footer */
+        .footer {
+            border-top: 2px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .stat {
+            text-align: center;
+            flex: 1;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 900;
+            background: linear-gradient(90deg, #ff006e, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: #999;
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+
+        .cta {
+            background: linear-gradient(135deg, #ff006e, #00d4ff);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+            white-space: nowrap;
+        }
+
+        @media (max-width: 1024px) {
+            .content {
+                padding: 40px 30px;
+            }
+
+            .logo-section {
+                gap: 15px;
+            }
+
+            .ninja-star-logo {
+                width: 70px;
+                height: 70px;
+            }
+
+            .ninja-text-logo {
+                font-size: 45px;
+            }
+
+            .integration {
+                gap: 25px;
+            }
+
+            .footer {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="post">
+        <div class="content">
+            <!-- Header with Logos -->
+            <div class="header">
+                <div class="logo-section">
+                    <!-- NinjaOne Star Logo -->
+                    <svg class="ninja-star-logo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="starGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#e07856;stop-opacity:1" />
+                                <stop offset="50%" style="stop-color:#d45d4a;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#c9543f;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <g transform="translate(100,100)">
+                            <path d="M 0,-75 L 22,-28 L 75,-28 L 37,12 L 60,65 L 0,28 L -60,65 L -37,12 L -75,-28 L -22,-28 Z"
+                                  fill="url(#starGrad)" stroke="none"/>
+                        </g>
+                    </svg>
+
+                    <!-- Text Logos -->
+                    <div class="ninja-text-logo">
+                        <span class="ninja-part">ninja</span><span class="one-part">One</span>
+                    </div>
+                </div>
+
+                <div class="ninja-text-logo" style="justify-content: center; margin-bottom: 15px;">
+                    <span class="plus-sign">+</span>
+                    <span class="claude-ai">Claude</span>
+                </div>
+
+                <div class="tagline">AI-POWERED INFRASTRUCTURE MANAGEMENT</div>
+            </div>
+
+            <!-- Main Integration -->
+            <div class="integration">
+                <!-- NinjaOne -->
+                <div class="platform-card">
+                    <svg class="platform-logo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="sg" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#e07856;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#c9543f;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <g transform="translate(100,100)">
+                            <path d="M 0,-75 L 22,-28 L 75,-28 L 37,12 L 60,65 L 0,28 L -60,65 L -37,12 L -75,-28 L -22,-28 Z"
+                                  fill="url(#sg)" stroke="none"/>
+                        </g>
+                    </svg>
+                    <div class="platform-name">NinjaOne</div>
+                    <div class="platform-desc">
+                        Remote Monitoring<br/>
+                        <strong>250+ Endpoints</strong><br/>
+                        OAuth 2.0
+                    </div>
+                </div>
+
+                <!-- MCP Bridge -->
+                <div class="bridge">
+                    <div class="arrow">⟶</div>
+                    <div class="mcp-box">🔗 MCP 🔗</div>
+                    <div class="arrow">⟵</div>
+                    <div class="bridge-label">Model Context Protocol</div>
+                    <div class="tools-dots">
+                        <div class="tool-dot">📱</div>
+                        <div class="tool-dot">🔄</div>
+                        <div class="tool-dot">🎫</div>
+                        <div class="tool-dot">📊</div>
+                        <div class="tool-dot">🛡️</div>
+                        <div class="tool-dot">⚙️</div>
+                    </div>
+                </div>
+
+                <!-- Claude -->
+                <div class="platform-card">
+                    <div class="platform-logo">🤖</div>
+                    <div class="platform-name">Claude</div>
+                    <div class="platform-desc">
+                        Natural Language<br/>
+                        <strong>20+ Tools</strong><br/>
+                        AI Reasoning
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Stats -->
+            <div class="footer">
+                <div class="stat">
+                    <div class="stat-value">20+</div>
+                    <div class="stat-label">TOOLS</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">250+</div>
+                    <div class="stat-label">ENDPOINTS</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">MIT</div>
+                    <div class="stat-label">LICENSE</div>
+                </div>
+                <div class="cta">✨ OPEN SOURCE</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
