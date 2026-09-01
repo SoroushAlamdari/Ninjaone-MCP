@@ -102,17 +102,39 @@
             margin-bottom: 30px;
         }
 
-        .ninja-logo-text {
-            font-size: 56px;
-            font-weight: 900;
-            color: white;
-            letter-spacing: -2px;
-            margin-bottom: 5px;
-            text-shadow: 0 4px 20px rgba(255, 0, 110, 0.3);
+        .ninja-logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 10px;
         }
 
-        .ninja-logo-text .ninja {
-            color: #ff006e;
+        .ninja-star {
+            width: 80px;
+            height: 80px;
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .ninja-logo-text {
+            font-size: 52px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -1px;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .ninja-text-part {
+            color: #1a1a2e;
+        }
+
+        .ninja-o {
+            color: #2ba3d0;
         }
 
         .plus-sign {
@@ -362,8 +384,23 @@
         <div class="content">
             <!-- Header -->
             <div class="header">
+                <div class="ninja-logo-container">
+                    <!-- NinjaOne Star Logo -->
+                    <svg class="ninja-star" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="starGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#e07856;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#d45d4a;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <g transform="translate(100,100)">
+                            <path d="M 0,-80 L 20,-30 L 70,-30 L 35,10 L 55,60 L 0,30 L -55,60 L -35,10 L -70,-30 L -20,-30 Z"
+                                  fill="url(#starGradient)" stroke="none"/>
+                        </g>
+                    </svg>
+                </div>
                 <div class="ninja-logo-text">
-                    <span class="ninja">ninjaOne</span>
+                    <span class="ninja-text-part">ninja</span><span class="ninja-o">One</span>
                     <span class="plus-sign">+</span>
                     <span class="claude-ai">Claude</span>
                 </div>
@@ -374,8 +411,19 @@
             <div class="integration">
                 <!-- NinjaOne -->
                 <div class="platform">
-                    <span class="platform-icon">🛡️</span>
-                    <div class="platform-name">NinjaOne</div>
+                    <svg style="width: 60px; height: 60px; margin: 0 auto 15px; display: block;" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="starGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#e07856;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#d45d4a;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <g transform="translate(100,100)">
+                            <path d="M 0,-80 L 20,-30 L 70,-30 L 35,10 L 55,60 L 0,30 L -55,60 L -35,10 L -70,-30 L -20,-30 Z"
+                                  fill="url(#starGrad)" stroke="none"/>
+                        </g>
+                    </svg>
+                    <div class="platform-name">NinjaOne RMM</div>
                     <div class="platform-info">
                         Remote Monitoring<br/>
                         <strong>250+ Endpoints</strong><br/>
