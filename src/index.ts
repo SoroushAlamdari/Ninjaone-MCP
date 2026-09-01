@@ -26,13 +26,34 @@ if (!config.clientId || !config.clientSecret) {
 const oauth = new OAuthManager(config);
 const client = new NinjaOneClient(config, oauth);
 
-// Token handling
-let currentToken = process.env.NINJA_ACCESS_TOKEN
-  ? JSON.parse(process.env.NINJA_ACCESS_TOKEN)
-  : null;
+// Token handling - automatically get token on startup
+async function initializeToken(): Promise<void> {
+  try {
+    // Try to use existing token from env
+    if (process.env.NINJA_ACCESS_TOKEN) {
+      const currentToken = JSON.parse(process.env.NINJA_ACCESS_TOKEN);
+      oauth.setToken(currentToken);
+      if (process.env.DEBUG) {
+        console.error("Using token from NINJA_ACCESS_TOKEN environment variable");
+      }
+      return;
+    }
 
-if (currentToken) {
-  oauth.setToken(currentToken);
+    // Otherwise get a new token using client credentials
+    if (process.env.DEBUG) {
+      console.error("Obtaining new access token using client credentials...");
+    }
+    await oauth.getAccessTokenWithClientCredentials();
+    if (process.env.DEBUG) {
+      console.error("Successfully obtained access token");
+    }
+  } catch (error) {
+    console.error(
+      "Failed to initialize token:",
+      error instanceof Error ? error.message : String(error)
+    );
+    process.exit(1);
+  }
 }
 
 async function processToolCall(
@@ -204,6 +225,9 @@ async function handleRequest(line: string): Promise<void> {
 }
 
 async function main() {
+  // Initialize token on startup
+  await initializeToken();
+
   // Log to stderr only in debug mode to avoid interfering with MCP protocol
   if (process.env.DEBUG) {
     console.error(

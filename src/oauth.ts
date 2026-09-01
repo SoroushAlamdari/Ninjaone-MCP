@@ -9,6 +9,36 @@ export class OAuthManager {
     this.config = config;
   }
 
+  async getAccessTokenWithClientCredentials(): Promise<OAuthToken> {
+    try {
+      const response = await axios.post<OAuthToken>(
+        `${this.config.apiBaseUrl}/ws/oauth/token`,
+        new URLSearchParams({
+          grant_type: "client_credentials",
+          client_id: this.config.clientId,
+          client_secret: this.config.clientSecret,
+          scope: "monitoring management control",
+        }),
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+        }
+      );
+
+      this.token = response.data;
+      if (this.token.expires_in) {
+        this.token.expires_at = Date.now() + this.token.expires_in * 1000;
+      }
+
+      return this.token;
+    } catch (error) {
+      throw new Error(
+        `Failed to obtain access token: ${error instanceof Error ? error.message : String(error)}`
+      );
+    }
+  }
+
   async getAccessToken(code: string): Promise<OAuthToken> {
     try {
       const response = await axios.post<OAuthToken>(
@@ -89,9 +119,19 @@ export class OAuthManager {
   }
 
   getAuthHeader(): string {
-    if (!this.token) {
-      throw new Error("No access token available");
+    // If we have an OAuth token, use it
+    if (this.token && this.token.access_token) {
+      return `Bearer ${this.token.access_token}`;
     }
-    return `Bearer ${this.token.access_token}`;
+
+    // Fallback to Basic Auth with API key credentials
+    if (this.config.clientId && this.config.clientSecret) {
+      const credentials = Buffer.from(
+        `${this.config.clientId}:${this.config.clientSecret}`
+      ).toString("base64");
+      return `Basic ${credentials}`;
+    }
+
+    throw new Error("No access token or API credentials available");
   }
 }
