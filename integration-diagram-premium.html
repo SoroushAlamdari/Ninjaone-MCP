@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NinjaOne MCP - AI-Powered Infrastructure</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #e8eef5 0%, #f5f7fb 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .page-container {
+            width: 100%;
+            max-width: 1800px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        /* Top Section with Background */
+        .hero-section {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            border-radius: 40px;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.2);
+        }
+
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-size: cover;
+            background-position: center;
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><defs><linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:rgb(232,238,245);stop-opacity:1" /><stop offset="100%" style="stop-color:rgb(245,247,251);stop-opacity:1" /></linearGradient></defs><rect fill="url(%23grad)" width="1200" height="600"/></svg>');
+            opacity: 0.5;
+        }
+
+        .hero-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 60px 40px;
+            z-index: 10;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.7), rgba(255,255,255,0.4));
+        }
+
+        /* Platform Cards in Hero */
+        .hero-platform {
+            flex: 1;
+            text-align: center;
+            padding: 40px 30px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            margin: 0 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-logo {
+            width: 140px;
+            height: 100px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-logo-ninja {
+            font-size: 48px;
+            font-weight: 900;
+            color: #1a2840;
+            letter-spacing: 1px;
+        }
+
+        .hero-logo-claude {
+            font-size: 42px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #00d4ff, #0066cc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-title {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            color: #1a1a2e;
+        }
+
+        .hero-desc {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .bridge-connector {
+            flex: 0.4;
+            text-align: center;
+        }
+
+        .connector-box {
+            background: linear-gradient(135deg, #ff006e, #00d4ff);
+            color: white;
+            padding: 20px 25px;
+            border-radius: 15px;
+            font-weight: 700;
+            font-size: 16px;
+            box-shadow: 0 10px 30px rgba(255,0,110,0.3);
+            margin-bottom: 10px;
+        }
+
+        .connector-text {
+            font-size: 12px;
+            color: #999;
+            font-weight: 600;
+        }
+
+        /* Main Content Section */
+        .content-section {
+            background: white;
+            border-radius: 40px;
+            padding: 80px 60px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 5;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 44px;
+            font-weight: 900;
+            color: #1a1a2e;
+            margin-bottom: 60px;
+            letter-spacing: -1px;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 60px;
+        }
+
+        .tool-card {
+            background: linear-gradient(135deg, #f9f9f9, #ffffff);
+            border: 2px solid #e8e8e8;
+            border-radius: 20px;
+            padding: 30px 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, #ff006e, #00d4ff);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .tool-card:hover {
+            border-color: #00d4ff;
+            box-shadow: 0 15px 40px rgba(0,212,255,0.15);
+            transform: translateY(-8px);
+        }
+
+        .tool-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .tool-icon {
+            font-size: 52px;
+            margin-bottom: 15px;
+        }
+
+        .tool-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 10px;
+        }
+
+        .tool-tag {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            display: inline-block;
+        }
+
+        .tag-device { color: #ff006e; background: rgba(255,0,110,0.1); }
+        .tag-action { color: #00d4ff; background: rgba(0,212,255,0.1); }
+        .tag-patch { color: #ffa500; background: rgba(255,165,0,0.1); }
+        .tag-ticket { color: #00cc00; background: rgba(0,204,0,0.1); }
+        .tag-org { color: #9d4edd; background: rgba(157,78,221,0.1); }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 60px;
+            padding-top: 60px;
+            border-top: 3px solid #e0e0e0;
+        }
+
+        .stat {
+            text-align: center;
+            padding: 25px;
+            background: linear-gradient(135deg, #f5f5f5, #ffffff);
+            border-radius: 20px;
+            border: 2px solid #e8e8e8;
+        }
+
+        .stat-number {
+            font-size: 48px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff006e, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 15px;
+            font-weight: 600;
+            color: #666;
+        }
+
+        /* CTA Footer */
+        .cta-footer {
+            background: linear-gradient(135deg, #ff006e, #00d4ff);
+            color: white;
+            padding: 60px;
+            border-radius: 30px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+
+        .cta-title {
+            font-size: 32px;
+            font-weight: 900;
+            margin-bottom: 25px;
+        }
+
+        .cta-link {
+            display: inline-block;
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            border-bottom: 3px solid rgba(255,255,255,0.5);
+            padding-bottom: 8px;
+            transition: all 0.3s;
+            margin: 0 20px;
+        }
+
+        .cta-link:hover {
+            border-bottom: 3px solid white;
+        }
+
+        .hashtags {
+            margin-top: 30px;
+            font-size: 14px;
+            opacity: 0.95;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 1024px) {
+            .hero-content {
+                flex-direction: column;
+                gap: 20px;
+                padding: 40px 20px;
+            }
+
+            .hero-platform {
+                margin: 0;
+            }
+
+            .bridge-connector {
+                width: 100%;
+            }
+
+            .content-section {
+                padding: 40px 30px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .tools-grid {
+                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            }
+        }
+
+        @media (max-width: 640px) {
+            .hero-section {
+                height: auto;
+                min-height: 600px;
+            }
+
+            .section-title {
+                font-size: 28px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .tools-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .cta-footer {
+                padding: 40px 20px;
+            }
+        }
+
+        .print-instructions {
+            text-align: center;
+            color: #999;
+            margin-top: 40px;
+            font-size: 13px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <div class="hero-background"></div>
+            <div class="hero-content">
+                <div class="hero-platform">
+                    <div class="hero-logo">
+                        <div class="hero-logo-ninja">NinjaOne</div>
+                    </div>
+                    <h3 class="hero-title">RMM Platform</h3>
+                    <p class="hero-desc">250+ API Endpoints<br/>OAuth 2.0 Secure</p>
+                </div>
+
+                <div class="bridge-connector">
+                    <div class="connector-box">🔗 MCP Bridge 🔗</div>
+                    <div class="connector-text">Secure Integration</div>
+                </div>
+
+                <div class="hero-platform">
+                    <div class="hero-logo">
+                        <div class="hero-logo-claude">Claude</div>
+                    </div>
+                    <h3 class="hero-title">AI Platform</h3>
+                    <p class="hero-desc">Natural Language<br/>AI Reasoning</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content-section">
+            <h2 class="section-title">20+ Intelligent Tools</h2>
+
+            <div class="tools-grid">
+                <!-- Device Management -->
+                <div class="tool-card"><span class="tool-icon">📱</span><div class="tool-name">List Devices</div><div class="tool-tag tag-device">Device</div></div>
+                <div class="tool-card"><span class="tool-icon">🔍</span><div class="tool-name">Search</div><div class="tool-tag tag-device">Device</div></div>
+                <div class="tool-card"><span class="tool-icon">ℹ️</span><div class="tool-name">Get Details</div><div class="tool-tag tag-device">Device</div></div>
+                <div class="tool-card"><span class="tool-icon">🚨</span><div class="tool-name">Alerts</div><div class="tool-tag tag-device">Device</div></div>
+
+                <!-- Actions -->
+                <div class="tool-card"><span class="tool-icon">🔄</span><div class="tool-name">Reboot</div><div class="tool-tag tag-action">Action</div></div>
+                <div class="tool-card"><span class="tool-icon">⚙️</span><div class="tool-name">Run Script</div><div class="tool-tag tag-action">Action</div></div>
+
+                <!-- Patches -->
+                <div class="tool-card"><span class="tool-icon">🔧</span><div class="tool-name">OS Patches</div><div class="tool-tag tag-patch">Patch</div></div>
+                <div class="tool-card"><span class="tool-icon">📦</span><div class="tool-name">Software</div><div class="tool-tag tag-patch">Patch</div></div>
+                <div class="tool-card"><span class="tool-icon">💾</span><div class="tool-name">Inventory</div><div class="tool-tag tag-patch">Patch</div></div>
+
+                <!-- Ticketing -->
+                <div class="tool-card"><span class="tool-icon">🎫</span><div class="tool-name">Create</div><div class="tool-tag tag-ticket">Ticket</div></div>
+                <div class="tool-card"><span class="tool-icon">📋</span><div class="tool-name">Get Ticket</div><div class="tool-tag tag-ticket">Ticket</div></div>
+                <div class="tool-card"><span class="tool-icon">✏️</span><div class="tool-name">Update</div><div class="tool-tag tag-ticket">Ticket</div></div>
+                <div class="tool-card"><span class="tool-icon">💬</span><div class="tool-name">Comment</div><div class="tool-tag tag-ticket">Ticket</div></div>
+
+                <!-- Organization -->
+                <div class="tool-card"><span class="tool-icon">🏢</span><div class="tool-name">Orgs</div><div class="tool-tag tag-org">Org</div></div>
+                <div class="tool-card"><span class="tool-icon">👥</span><div class="tool-name">Contacts</div><div class="tool-tag tag-org">Org</div></div>
+
+                <!-- Reports -->
+                <div class="tool-card"><span class="tool-icon">📊</span><div class="tool-name">Health</div><div class="tool-tag tag-org">Report</div></div>
+                <div class="tool-card"><span class="tool-icon">🛡️</span><div class="tool-name">Antivirus</div><div class="tool-tag tag-org">Report</div></div>
+
+                <!-- Advanced -->
+                <div class="tool-card"><span class="tool-icon">🔗</span><div class="tool-name">API GET</div><div class="tool-tag tag-action">API</div></div>
+                <div class="tool-card"><span class="tool-icon">📤</span><div class="tool-name">API POST</div><div class="tool-tag tag-action">API</div></div>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat"><div class="stat-number">20+</div><div class="stat-label">Tools</div></div>
+                <div class="stat"><div class="stat-number">250+</div><div class="stat-label">Endpoints</div></div>
+                <div class="stat"><div class="stat-number">OAuth 2.0</div><div class="stat-label">Security</div></div>
+                <div class="stat"><div class="stat-number">MIT</div><div class="stat-label">License</div></div>
+            </div>
+        </div>
+
+        <!-- CTA Footer -->
+        <div class="cta-footer">
+            <h2 class="cta-title">🚀 AI-Powered Infrastructure Management</h2>
+            <a href="https://github.com/SoroushAlamdari/ninjaone-mcp" class="cta-link">GitHub</a>
+            <a href="#" class="cta-link">Docs</a>
+            <a href="#" class="cta-link">Open Source</a>
+            <div class="hashtags">
+                #NinjaOne #Claude #AI #ITOps #Automation #OpenSource
+            </div>
+        </div>
+
+        <p class="print-instructions">💡 Press Ctrl+S to save as PDF or Ctrl+P to print</p>
+    </div>
+</body>
+</html>
