@@ -342,15 +342,27 @@
                     <!-- NinjaOne Star Logo -->
                     <svg class="ninja-star-logo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
                         <defs>
-                            <linearGradient id="starGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" style="stop-color:#e07856;stop-opacity:1" />
-                                <stop offset="50%" style="stop-color:#d45d4a;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#c9543f;stop-opacity:1" />
-                            </linearGradient>
+                            <radialGradient id="starGrad2" cx="50%" cy="50%" r="50%">
+                                <stop offset="0%" style="stop-color:#e89968;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#d9634d;stop-opacity:1" />
+                            </radialGradient>
                         </defs>
                         <g transform="translate(100,100)">
-                            <path d="M 0,-75 L 22,-28 L 75,-28 L 37,12 L 60,65 L 0,28 L -60,65 L -37,12 L -75,-28 L -22,-28 Z"
-                                  fill="url(#starGrad)" stroke="none"/>
+                            <!-- Center circle -->
+                            <circle cx="0" cy="0" r="25" fill="url(#starGrad2)"/>
+                            <!-- 12 rounded petals -->
+                            <ellipse cx="0" cy="-65" rx="22" ry="35" fill="url(#starGrad2)"/>
+                            <ellipse cx="56.3" cy="-32.5" rx="22" ry="35" fill="url(#starGrad2)" transform="rotate(30)"/>
+                            <ellipse cx="56.3" cy="-32.5" rx="22" ry="35" fill="url(#starGrad2)" transform="rotate(60)"/>
+                            <ellipse cx="0" cy="-65" rx="22" ry="35" fill="url(#starGrad2)" transform="rotate(90)"/>
+                            <ellipse cx="56.3" cy="-32.5" rx="22" ry="35" fill="url(#starGrad2)" transform="rotate(120)"/>
+                            <ellipse cx="56.3" cy="-32.5" rx="22" ry="35" fill="url(#starGrad2)" transform="rotate(150)"/>
+                            <ellipse cx="0" cy="-65" rx="22" ry="35" fill="url(#starGrad2)" transform="rotate(180)"/>
+                            <ellipse cx="56.3" cy="-32.5" rx="22" ry="35" fill="url(#starGrad2)" transform="rotate(210)"/>
+                            <ellipse cx="56.3" cy="-32.5" rx="22" ry="35" fill="url(#starGrad2)" transform="rotate(240)"/>
+                            <ellipse cx="0" cy="-65" rx="22" ry="35" fill="url(#starGrad2)" transform="rotate(270)"/>
+                            <ellipse cx="56.3" cy="-32.5" rx="22" ry="35" fill="url(#starGrad2)" transform="rotate(300)"/>
+                            <ellipse cx="56.3" cy="-32.5" rx="22" ry="35" fill="url(#starGrad2)" transform="rotate(330)"/>
                         </g>
                     </svg>
 
@@ -374,14 +386,27 @@
                 <div class="platform-card">
                     <svg class="platform-logo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
                         <defs>
-                            <linearGradient id="sg" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" style="stop-color:#e07856;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#c9543f;stop-opacity:1" />
-                            </linearGradient>
+                            <radialGradient id="sg2" cx="50%" cy="50%" r="50%">
+                                <stop offset="0%" style="stop-color:#e89968;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#d9634d;stop-opacity:1" />
+                            </radialGradient>
                         </defs>
                         <g transform="translate(100,100)">
-                            <path d="M 0,-75 L 22,-28 L 75,-28 L 37,12 L 60,65 L 0,28 L -60,65 L -37,12 L -75,-28 L -22,-28 Z"
-                                  fill="url(#sg)" stroke="none"/>
+                            <!-- Center circle -->
+                            <circle cx="0" cy="0" r="20" fill="url(#sg2)"/>
+                            <!-- 12 rounded petals -->
+                            <ellipse cx="0" cy="-55" rx="18" ry="28" fill="url(#sg2)"/>
+                            <ellipse cx="47.6" cy="-27.5" rx="18" ry="28" fill="url(#sg2)" transform="rotate(30)"/>
+                            <ellipse cx="47.6" cy="-27.5" rx="18" ry="28" fill="url(#sg2)" transform="rotate(60)"/>
+                            <ellipse cx="0" cy="-55" rx="18" ry="28" fill="url(#sg2)" transform="rotate(90)"/>
+                            <ellipse cx="47.6" cy="-27.5" rx="18" ry="28" fill="url(#sg2)" transform="rotate(120)"/>
+                            <ellipse cx="47.6" cy="-27.5" rx="18" ry="28" fill="url(#sg2)" transform="rotate(150)"/>
+                            <ellipse cx="0" cy="-55" rx="18" ry="28" fill="url(#sg2)" transform="rotate(180)"/>
+                            <ellipse cx="47.6" cy="-27.5" rx="18" ry="28" fill="url(#sg2)" transform="rotate(210)"/>
+                            <ellipse cx="47.6" cy="-27.5" rx="18" ry="28" fill="url(#sg2)" transform="rotate(240)"/>
+                            <ellipse cx="0" cy="-55" rx="18" ry="28" fill="url(#sg2)" transform="rotate(270)"/>
+                            <ellipse cx="47.6" cy="-27.5" rx="18" ry="28" fill="url(#sg2)" transform="rotate(300)"/>
+                            <ellipse cx="47.6" cy="-27.5" rx="18" ry="28" fill="url(#sg2)" transform="rotate(330)"/>
                         </g>
                     </svg>
                     <div class="platform-name">NinjaOne</div>
