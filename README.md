@@ -267,6 +267,96 @@ Ask Claude any of these:
 
 ---
 
+## 📡 API Methods & Endpoints
+
+All tools communicate with **NinjaOne API v2.0** using the following base URL:
+```
+https://<your-instance>.ninjarmm.com/api/v2
+```
+
+### Authentication Header
+All requests include:
+```
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+### Tool Reference with API Methods
+
+| Tool | HTTP Method | Endpoint | Description |
+|------|------------|----------|-------------|
+| `list_devices` | GET | `/devices` | Retrieve paginated device list |
+| `get_device` | GET | `/devices/{id}` | Get single device details |
+| `search_devices` | GET | `/devices?filter=...` | Search using filter syntax |
+| `get_device_alerts` | GET | `/devices/{id}/alerts` | Get alerts for device |
+| `get_all_alerts` | GET | `/alerts` | Get all active alerts |
+| `reboot_device` | POST | `/devices/{id}/reboot` | Initiate device reboot |
+| `run_script` | POST | `/devices/{id}/scripts` | Execute script on device |
+| `get_os_patches` | GET | `/devices/{id}/patches/os` | Get OS patch status |
+| `get_software_patches` | GET | `/devices/{id}/patches/software` | Get software patch status |
+| `get_device_software` | GET | `/devices/{id}/software` | Get installed software |
+| `create_ticket` | POST | `/tickets` | Create support ticket |
+| `get_ticket` | GET | `/tickets/{id}` | Get ticket details |
+| `update_ticket` | PATCH | `/tickets/{id}` | Update ticket |
+| `add_ticket_comment` | POST | `/tickets/{id}/comments` | Add ticket comment |
+| `list_organizations` | GET | `/organizations` | List all organizations |
+| `get_organization` | GET | `/organizations/{id}` | Get org details |
+| `list_contacts` | GET | `/contacts` | List all contacts |
+| `get_device_health` | GET | `/reports/device-health` | Get device health report |
+| `get_antivirus_status` | GET | `/reports/antivirus` | Get antivirus report |
+| `api_get` | GET | `/{path}` | Custom GET request |
+| `api_post` | POST | `/{path}` | Custom POST request |
+
+### Example API Calls
+
+**List Devices (with pagination):**
+```bash
+curl -X GET "https://your-instance.ninjarmm.com/api/v2/devices?pageNo=1&pageSize=50" \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+  -H "Content-Type: application/json"
+```
+
+**Get Device Details:**
+```bash
+curl -X GET "https://your-instance.ninjarmm.com/api/v2/devices/12345" \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
+```
+
+**Search Devices with Filter:**
+```bash
+curl -X GET "https://your-instance.ninjarmm.com/api/v2/devices?filter=status=online" \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
+```
+
+**Create a Ticket:**
+```bash
+curl -X POST "https://your-instance.ninjarmm.com/api/v2/tickets" \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "Device Offline",
+    "description": "Device XYZ is offline",
+    "priority": "high"
+  }'
+```
+
+**Reboot a Device:**
+```bash
+curl -X POST "https://your-instance.ninjarmm.com/api/v2/devices/12345/reboot" \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"mode": "graceful"}'
+```
+
+### NinjaOne API Documentation
+
+For complete API reference and additional endpoints:
+- **Main API Docs:** https://app.ninjarmm.com/apidocs
+- **Beta API:** https://app.ninjarmm.com/apidocs-beta/core-resources
+- **Authorization:** https://app.ninjarmm.com/apidocs-beta/authorization/overview
+
+---
+
 ## 🛠️ Development
 
 ### Build Production Code
