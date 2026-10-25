@@ -16,21 +16,22 @@ export class NinjaOneClient {
       timeout: 30000,
     });
 
-    this.client.interceptors.request.use((config) => {
-      if (!config.headers.Authorization) {
-        config.headers.Authorization = this.oauth.getAuthHeader();
-      }
+    this.client.interceptors.request.use(async (config) => {
+      await this.oauth.ensureValidToken();
+      config.headers.Authorization = this.oauth.getAuthHeader();
       return config;
     });
 
     this.client.interceptors.response.use(
       (response) => response,
       async (error: AxiosError) => {
-        if (error.response?.status === 401 && this.oauth.getToken()?.refresh_token) {
+        const cfg = error.config as any;
+        if (error.response?.status === 401 && cfg && !cfg._retried) {
+          cfg._retried = true;
           try {
-            await this.oauth.refreshAccessToken(this.oauth.getToken()!.refresh_token!);
-            error.config!.headers.Authorization = this.oauth.getAuthHeader();
-            return this.client(error.config!);
+            await this.oauth.renew();
+            cfg.headers.Authorization = this.oauth.getAuthHeader();
+            return this.client(cfg);
           } catch (refreshError) {
             throw new Error(`Token refresh failed: ${refreshError}`);
           }

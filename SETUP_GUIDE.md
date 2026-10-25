@@ -61,9 +61,9 @@ npm install
 # Create .env file with your real credentials
 cp .env.example .env
 # Edit .env with:
-# NINJA_CLIENT_ID=57L3LC9K7C7H61NBF7QO
-# NINJA_CLIENT_SECRET=your_secret_key
-# NINJA_REDIRECT_URI=https://bec.rmmservice.ca/
+# NINJA_CLIENT_ID=your_client_id
+# NINJA_CLIENT_SECRET=your_client_secret
+# NINJA_API_BASE_URL=https://app.ninjarmm.com   (your instance URL)
 
 # Build TypeScript
 npm run build

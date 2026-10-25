@@ -16,9 +16,9 @@ cp .env.example .env
 
 3. **Add your credentials:**
 ```
-NINJA_CLIENT_ID=57L3LC9K7C7H61NBF7QO
-NINJA_CLIENT_SECRET=your_secret_key_here
-NINJA_REDIRECT_URI=https://bec.rmmservice.ca/
+NINJA_CLIENT_ID=your_client_id
+NINJA_CLIENT_SECRET=your_client_secret
+NINJA_API_BASE_URL=https://app.ninjarmm.com
 ```
 
 4. **Build:**
