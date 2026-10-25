@@ -91,7 +91,6 @@ This server uses **OAuth 2.0 client credentials flow** for secure API access. Fo
 4. Fill in the form:
    - **Application platform:** `API Services (machine-to-machine)`
    - **Name:** `Claude MCP` (or your preferred name)
-   - **Redirect URI:** `http://localhost:3000/callback`
    - **Scopes:** Check `Monitoring`, `Management`, `Control`
    - **Allowed grant types:** Check `Client credentials`
 5. Click **Create** and copy the generated credentials
@@ -108,11 +107,26 @@ Edit `.env` and add your credentials:
 ```env
 NINJA_CLIENT_ID=<your_client_id_here>
 NINJA_CLIENT_SECRET=<your_client_secret_here>
-NINJA_REDIRECT_URI=http://localhost:3000/callback
 NINJA_API_BASE_URL=https://your-instance.ninjarmm.com
 ```
 
-> ⚠️ **Security:** Never commit `.env` to version control. The `.gitignore` file protects it automatically.
+> ⚠️ **Security:** Never commit `.env` or `token.json` to version control. `.gitignore` covers both. Keep real values out of `.env.example` — it *is* committed.
+
+### How tokens are handled
+
+- On start the server loads `token.json` if present, otherwise requests a token with **client credentials**.
+- Before each API call it renews the token if it is within a minute of expiry, and if NinjaOne still answers `401` it renews once and retries.
+- Every new token is saved to `token.json`, so restarts don't break the connection.
+
+### Alternative: browser login (Web app + refresh token)
+
+If you can only use a **Web** client app, enable the **Authorization code** and **Refresh token** grants on it, then run once:
+
+```bash
+node get-oauth-token.js
+```
+
+Open the printed link, sign in, and the token (with refresh token) is saved to `token.json`. The script reads credentials from `.env` or from your Claude Desktop config. If NinjaOne answers `Invalid scope offline_access`, the app isn't allowed refresh tokens — use the API Services app above instead.
 
 ---
 
@@ -136,7 +150,6 @@ NINJA_API_BASE_URL=https://your-instance.ninjarmm.com
       "env": {
         "NINJA_CLIENT_ID": "<your_client_id>",
         "NINJA_CLIENT_SECRET": "<your_client_secret>",
-        "NINJA_REDIRECT_URI": "http://localhost:3000/callback",
         "NINJA_API_BASE_URL": "https://your-instance.ninjarmm.com"
       }
     }
@@ -161,7 +174,6 @@ NINJA_API_BASE_URL=https://your-instance.ninjarmm.com
       "env": {
         "NINJA_CLIENT_ID": "<your_client_id>",
         "NINJA_CLIENT_SECRET": "<your_client_secret>",
-        "NINJA_REDIRECT_URI": "http://localhost:3000/callback",
         "NINJA_API_BASE_URL": "https://your-instance.ninjarmm.com"
       }
     }

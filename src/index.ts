@@ -29,30 +29,23 @@ const client = new NinjaOneClient(config, oauth);
 // Token handling - automatically get token on startup
 async function initializeToken(): Promise<void> {
   try {
-    // Try to use existing token from env
-    if (process.env.NINJA_ACCESS_TOKEN) {
-      const currentToken = JSON.parse(process.env.NINJA_ACCESS_TOKEN);
-      oauth.setToken(currentToken);
-      if (process.env.DEBUG) {
-        console.error("Using token from NINJA_ACCESS_TOKEN environment variable");
-      }
-      return;
+    // 1. Saved token (kept current by every refresh)
+    if (oauth.loadSavedToken()) {
+      if (process.env.DEBUG) console.error("Using saved token file");
+    } else if (process.env.NINJA_ACCESS_TOKEN) {
+      // 2. Token pasted into the environment (legacy)
+      oauth.setToken(JSON.parse(process.env.NINJA_ACCESS_TOKEN));
+      if (process.env.DEBUG) console.error("Using token from NINJA_ACCESS_TOKEN");
     }
-
-    // Otherwise get a new token using client credentials
-    if (process.env.DEBUG) {
-      console.error("Obtaining new access token using client credentials...");
-    }
-    await oauth.getAccessTokenWithClientCredentials();
-    if (process.env.DEBUG) {
-      console.error("Successfully obtained access token");
-    }
+    // 3. Renew now if missing/expired (refresh token, else client credentials)
+    await oauth.ensureValidToken();
   } catch (error) {
+    // Don't exit: tools will report the auth error instead of the server vanishing.
     console.error(
-      "Failed to initialize token:",
-      error instanceof Error ? error.message : String(error)
+      "NinjaOne auth not ready:",
+      error instanceof Error ? error.message : String(error),
+      "- run: node get-oauth-token.js"
     );
-    process.exit(1);
   }
 }
 

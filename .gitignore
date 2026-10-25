@@ -37,3 +37,6 @@ coverage/
 tmp/
 temp/
 *.tmp
+
+# NinjaOne OAuth token (written by the server / get-oauth-token.js)
+token.json
